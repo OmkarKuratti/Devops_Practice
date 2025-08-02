@@ -2,8 +2,6 @@ Hello good morning!!
 
 what a nice day!!
 
-<<<<<<< HEAD
-Let's rock the day!!
-=======
 Let's make it more pretty....
->>>>>>> 102c8f7 (Changing from server)
+
+Let's rock the day!!
