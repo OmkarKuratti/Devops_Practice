@@ -3,7 +3,7 @@
 
 #email recipient list
 
-#set x
+set x
 
 To="omkar.kuratti@gmail.com"
 Subject="Docker server alert"
