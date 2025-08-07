@@ -9,3 +9,5 @@ Omkar
 +91 123456789
 
 making new changes.
+
+Lets check how to resolve conflicts in Git.
