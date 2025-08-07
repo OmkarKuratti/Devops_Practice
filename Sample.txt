@@ -11,3 +11,5 @@ Omkar
 making new changes.
 
 Let's wind-up these issues.
+
+Lets check how to resolve conflicts in Git.
