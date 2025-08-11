@@ -1,0 +1,20 @@
+pipeline{
+    agent any
+    stages{
+        stage("Git Checkout")
+        {
+            steps{
+                Git branch "Jenkins", url: "https://github.com/OmkarKuratti/Devops_Practice.git"
+                }
+        }
+        
+        stage("Build ")
+        {
+            steps{
+                echo "Building the project!!!"
+                }
+        }
+        
+        }
+    
+}
