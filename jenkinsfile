@@ -4,7 +4,7 @@ pipeline{
         stage("Git Checkout")
         {
             steps{
-                Git branch: 'jenkins' , url: 'https://github.com/OmkarKuratti/Devops_Practice.git'
+                git branch: 'jenkins' , url: 'https://github.com/OmkarKuratti/Devops_Practice.git'
                 }
         }
         
