@@ -1,5 +1,5 @@
 pipeline{
-    agent any
+    agent {label: 'Prod'}
     stages{
         stage('Server IP'){
             steps{
