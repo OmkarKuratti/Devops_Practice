@@ -8,6 +8,7 @@ pipeline{
                     echo "server ip address: $(hostname -i)"
                 '''
             }
+        }    
 
         stage('uptime'){    
             steps{
