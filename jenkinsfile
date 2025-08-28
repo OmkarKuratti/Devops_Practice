@@ -5,9 +5,10 @@ pipeline{
         stage("Git Checkout")
         {
             steps{
-                git branch: 'main' , url: 'https://github.com/ManojKRISHNAPPA/test-1.git'
+                git branch: 'test' , url: 'https://github.com/OmkarKuratti/Devops_Practice.git'
                 }
         }
+     
         
         stage("Shell Script")
         {
