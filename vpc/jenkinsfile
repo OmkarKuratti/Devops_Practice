@@ -1,6 +1,12 @@
 pipeline{
+    agent any
+
     parameters{
-        choice( name: 'terraformActions',choices:['apply','destroy'],description:'choose your action to perform')
+        choice(
+            name: 'terraformAction',
+            choices:['apply','destroy'],
+            description:'choose your action to perform'
+            )
     }
     
     environment{
@@ -8,13 +14,10 @@ pipeline{
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
     }
 
-    agent any
-
     stages{
         stage('Git checkout'){
             steps{
-                scripts{
-                    dir('terraform'){
+                dir('terraform'){
                         git branch: 'terraform',url:'https://github.com/OmkarKuratti/Devops_Practice.git'
                     }
                 }
@@ -23,18 +26,28 @@ pipeline{
 
         stage('Plan'){
             steps{
-                sh 'pwd: cd vpc/; terraform init'
-                sh 'pwd: cd vpc/; terraform plan -out tfplan'
-                sh 'pwd: cd vpc/; terraform show -no-color tfplan >> tfplan.txt'
+                dir('terraform/VPC'){
+                    sh 'terraform init'
+                    sh 'terraform plan -out tfplan'
+                    sh 'terraform show -no-color tfplan >> tfplan.txt'
+                }
             }
         }
 
         stage('Approval'){
             steps{
                 script{
-                    def plan = readfile 'VPC/tfplan.txt'
-                    input message: "do you want to proceed with terraform action ... ?"
-                    parameters: [text(name: 'plan',description : 'can you please review your plan one more time',defaultValue: plan)]
+                    def plan = readfile ('terraform/VPC/tfplan.txt')
+                    input(
+                        message: "do you want to proceed with terraform ${params.terraformAction} action ... ?"
+                        parameters: 
+                            [text(
+                                name: 'plan',
+                                description : 'can you please review your plan one more time',
+                                defaultValue: plan
+                                )
+                            ]
+                    )
                 }
             }
         }
@@ -46,16 +59,16 @@ pipeline{
                 }
             }
             steps{
-                script{
-                    if (parms.terraformActions == 'apply'){
-                        sh "pwd: cd vpc/; terraform apply -input=false tfplan"
-                    }else if (parms.terraformActions == 'destroy'){
-                        sh "pwd: cd vpc/; terraform apply -auto-approve"
+                dir('terraform/VPC'){
+                    script{
+                        if (parms.terraformActions == 'apply'){
+                            sh "terraform apply -input=false tfplan"
+                        }else if (parms.terraformActions == 'destroy'){
+                            sh "terraform apply -auto-approve"
+                        }
+                    }
                 }
             }
         }
-    }
-
-
-    }
+    
 }
