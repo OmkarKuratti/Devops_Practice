@@ -1,0 +1,61 @@
+pipeline{
+    parameters{
+        choice( name: 'terraformActions',choice:['apply','destroy'],description:'choose your action to perform')
+    }
+    
+    environment{
+        AWS_ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    }
+
+    agent any
+
+    stages{
+        stage('Git checkout'){
+            steps{
+                scripts{
+                    dir('terraform'){
+                        git bracnh: 'terraform',url:'https://github.com/OmkarKuratti/Devops_Practice.git'
+                    }
+                }
+            }
+        }
+
+        stage('Plan'){
+            steps{
+                sh 'pwd: cd vpc/; terraform init'
+                sh 'pwd: cd vpc/; terraform plan -out tfplan'
+                sh 'pwd: cd vpc/; terraform show -no-color tfplan >> tfplan.txt'
+            }
+        }
+
+        stage('Approval'){
+            steps{
+                script{
+                    def plan = readfile 'VPC/tfplan.txt'
+                    input message: "do you want to proceed with terraform action ... ?"
+                    parameters: [text(name: 'plan',description : 'can you please review your plan one more time',defaultValue: plan)]
+                }
+            }
+        }
+
+        stage('Apply or destroy'){
+            when{
+                expression{
+                    return parms.terraformActions == 'apply' || parms.terraformActions == 'destroy'
+                }
+            }
+            steps{
+                script{
+                    if (parms.terraformActions == 'apply'){
+                        sh "pwd: cd vpc/; terraform apply -input=false tfplan"
+                    }else if (parms.terraformActions == 'destroy'){
+                        sh "pwd: cd vpc/; terraform apply -auto-approve"
+                }
+            }
+        }
+    }
+
+
+
+}
