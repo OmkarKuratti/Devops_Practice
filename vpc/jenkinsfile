@@ -40,8 +40,8 @@ pipeline{
                     def plan = readfile ('terraform/VPC/tfplan.txt')
                     input(
                         message: "do you want to proceed with terraform ${params.terraformAction} action ... ?"
-                        parameters: 
-                            [text(
+                        parameters: [
+                            text(
                                 name: 'plan',
                                 description : 'can you please review your plan one more time',
                                 defaultValue: plan
