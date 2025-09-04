@@ -39,7 +39,7 @@ pipeline{
                 script{
                     def plan = readFile ('terraform/VPC/tfplan.txt')
                     input(
-                        message: "do you want to proceed with terraform ${params.terraformAction} action ... ?"
+                        message: "do you want to proceed with terraform ${params.terraformAction} action ... ?",
                         parameters: [
                             text(
                                 name: 'plan',
