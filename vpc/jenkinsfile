@@ -37,7 +37,7 @@ pipeline{
         stage('Approval'){
             steps{
                 script{
-                    def plan = readfile ('terraform/VPC/tfplan.txt')
+                    def plan = readFile ('terraform/VPC/tfplan.txt')
                     input(
                         message: "do you want to proceed with terraform ${params.terraformAction} action ... ?"
                         parameters: [
@@ -55,16 +55,16 @@ pipeline{
         stage('Apply or destroy'){
             when{
                 expression{
-                    return parms.terraformActions == 'apply' || parms.terraformActions == 'destroy'
+                    return params.terraformAction == 'apply' || params.terraformAction == 'destroy'
                 }
             }
             steps{
                 dir('terraform/VPC'){
                     script{
-                        if (parms.terraformActions == 'apply'){
+                        if (params.terraformAction == 'apply'){
                             sh "terraform apply -input=false tfplan"
-                        }else if (parms.terraformActions == 'destroy'){
-                            sh "terraform apply -auto-approve"
+                        }else if (params.terraformAction == 'destroy'){
+                            sh "terraform destroy -auto-approve"
                         }
                     }
                 }
