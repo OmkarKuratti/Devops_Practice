@@ -15,7 +15,7 @@ pipeline{
             steps{
                 scripts{
                     dir('terraform'){
-                        git bracnh: 'terraform',url:'https://github.com/OmkarKuratti/Devops_Practice.git'
+                        git branch: 'terraform',url:'https://github.com/OmkarKuratti/Devops_Practice.git'
                     }
                 }
             }
