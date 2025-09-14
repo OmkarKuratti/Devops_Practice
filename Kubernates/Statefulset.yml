@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metatadata: 
+    name: ngnix-statefulset
+spec:
+    serviceName: "ngnix"
+    replicas: 3
+    selector:
+        matchLabels:
+            app: ngnix-statefulset
+    template:
+        metadata:
+            labels:
+            app: ngnix-statefulset
+        spec:
+            containers:
+            - name: ngnix
+            image: nginx
+            ports:
+            - containerPort: 80
+            volumeMounts:
+            - name: www
+                mountPath: /usr/share/ngnix/html
+    volumeClaimTemplates:
+    -   metadata:
+            name: www
+        spec:
+            accessModes: [ "ReadWriteOnce" ]
+            resources:
+                requests:
+                    storage: 1Gi
+
+
